@@ -278,12 +278,19 @@ export abstract class BaseDeclarativeTool<
   TParams extends object,
   TResult extends ToolResult,
 > extends DeclarativeTool<TParams, TResult> {
+  
+  protected fixParams(params: object): object {
+    return params;
+  }
+
   build(params: TParams): ToolInvocation<TParams, TResult> {
-    const validationError = this.validateToolParams(params);
+    const processedParams = this.fixParams(params) as TParams;
+    
+    const validationError = this.validateToolParams(processedParams);
     if (validationError) {
       throw new Error(validationError);
     }
-    return this.createInvocation(params);
+    return this.createInvocation(processedParams);
   }
 
   override validateToolParams(params: TParams): string | null {

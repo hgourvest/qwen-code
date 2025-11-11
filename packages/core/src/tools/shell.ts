@@ -497,6 +497,19 @@ export class ShellTool extends BaseDeclarativeTool<
     return null;
   }
 
+  protected override fixParams(params: object): object {
+    const result = { ...params } as Record<string, unknown>;
+    
+    const value = result["is_background"];
+
+    if (value === "False") {
+      result["is_background"] = false;
+    } else if (value === "True") {
+      result["is_background"] = true;
+    }
+    
+  return result;
+}
   protected createInvocation(
     params: ShellToolParams,
   ): ToolInvocation<ShellToolParams, ToolResult> {
